@@ -24,9 +24,13 @@ class StatsRepository(private val context: Context) {
             val firstVehicleName = sharedPrefs.getVehicleName()
             if (firstVehicleId != -1L) {
                 val chargeState = TeslaService.endpoints.getChargeState(firstVehicleId).chargeState
-                notificationManager.sendNotification("$firstVehicleName has a battery level of ${chargeState.batteryLevel}%\n" +
-                        "\t-Range: ${chargeState.batteryRange}\n" +
-                        "\t-Est. Range based on your avg. consumption: ${chargeState.estBatteryRange}")
+                if (chargeState.batteryLevel < 25) {
+                    notificationManager.sendNotification(
+                        "$firstVehicleName has a battery level of ${chargeState.batteryLevel}%\n" +
+                                "\t-Range: ${chargeState.batteryRange}\n" +
+                                "\t-Est. Range based on your avg. consumption: ${chargeState.estBatteryRange}"
+                    )
+                }
             }
         }
     }

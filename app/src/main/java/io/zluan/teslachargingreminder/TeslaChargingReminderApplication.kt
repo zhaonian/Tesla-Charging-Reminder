@@ -1,7 +1,6 @@
 package io.zluan.teslachargingreminder
 
 import android.app.Application
-import android.util.Log
 import androidx.work.*
 import io.zluan.teslachargingreminder.work.RefreshDataWorker
 import kotlinx.coroutines.CoroutineScope
