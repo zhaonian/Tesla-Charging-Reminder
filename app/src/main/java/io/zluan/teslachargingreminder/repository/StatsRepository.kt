@@ -20,18 +20,19 @@ class StatsRepository(private val context: Context) {
 
     suspend fun refreshChargeState() {
         withContext(Dispatchers.IO) {
-            val firstVehicleId = sharedPrefs.getVehicleId()
-            val firstVehicleName = sharedPrefs.getVehicleName()
-            if (firstVehicleId != -1L) {
-                val chargeState = TeslaService.endpoints.getChargeState(firstVehicleId).chargeState
-                if (chargeState.batteryLevel < 25) {
-                    notificationManager.sendNotification(
-                        "$firstVehicleName has a battery level of ${chargeState.batteryLevel}%\n" +
-                                "\t-Range: ${chargeState.batteryRange}\n" +
-                                "\t-Est. Range based on your avg. consumption: ${chargeState.estBatteryRange}"
-                    )
-                }
-            }
+            notificationManager.sendNotification(
+                "firstVehicleName has a battery level of {chargeState.batteryLevel}%\n" +
+                        "\t-Range: {chargeState.batteryRange}\n" +
+                        "\t-Est. Range based on your avg. consumption: {chargeState.estBatteryRange}"
+            )
+//            val firstVehicleId = sharedPrefs.getVehicleId()
+//            val firstVehicleName = sharedPrefs.getVehicleName()
+//            if (firstVehicleId != -1L) {
+//                val chargeState = TeslaService.endpoints.getChargeState(firstVehicleId).chargeState
+//                if (chargeState.batteryLevel < 25) {
+//
+//                }
+//            }
         }
     }
 

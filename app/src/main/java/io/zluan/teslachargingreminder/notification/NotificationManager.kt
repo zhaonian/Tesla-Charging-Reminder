@@ -12,6 +12,7 @@ import android.media.AudioAttributes.CONTENT_TYPE_SONIFICATION
 import android.media.AudioAttributes.USAGE_NOTIFICATION_RINGTONE
 import android.media.RingtoneManager.TYPE_NOTIFICATION
 import android.media.RingtoneManager.getDefaultUri
+import android.widget.RemoteViews
 import io.zluan.teslachargingreminder.MainActivity
 import io.zluan.teslachargingreminder.R
 
@@ -38,15 +39,14 @@ class NotificationManager(private val context: Context) {
         }
         notificationManager.createNotificationChannel(notificationChannel)
 
+        val notificationLayout = RemoteViews(context.packageName, R.layout.notification_expanded)
         val pendingIntent = Intent(context, MainActivity::class.java).let { notificationIntent ->
             PendingIntent.getActivity(context,  /* requestCode= */ 0, notificationIntent, /* flags= */ 0)
         }
 
         val notification = Notification.Builder(context, notificationChannelId)
-            .setContentTitle("Tesla Charging Reminder")
-            .setContentText(body)
-            .setSmallIcon(R.drawable.ic_baseline_battery_charging_full_24)
-            .setShowWhen(true)
+            .setCustomBigContentView(notificationLayout)
+            .setSmallIcon(R.drawable.ic_lightning_bolt)
             .setContentIntent(pendingIntent)
             .build()
 
