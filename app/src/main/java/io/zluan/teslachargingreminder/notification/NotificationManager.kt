@@ -17,8 +17,8 @@ import io.zluan.teslachargingreminder.R
 
 class NotificationManager(private val context: Context) {
 
-    fun sendNotification(nickname: String, battery: Int) {
-        val notificationChannelId = "Time Traveler Channel Id"
+    fun sendNotification(body: String) {
+        val notificationChannelId = "Tesla Charging Reminder Channel Id"
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val ringtoneManager = getDefaultUri(TYPE_NOTIFICATION)
         val audioAttributes = AudioAttributes.Builder()
@@ -26,10 +26,10 @@ class NotificationManager(private val context: Context) {
             .setContentType(CONTENT_TYPE_SONIFICATION).build()
         val notificationChannel = NotificationChannel(
             notificationChannelId,
-            /* name= */ "Time Traveler",
+            /* name= */ "Tesla Charging Reminder",
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
-            description = "Time Traveler Channel"
+            description = "Tesla Charging Reminder Channel"
             enableLights(/* lights= */ true)
             lightColor = Color.RED
             enableVibration(true)
@@ -44,8 +44,9 @@ class NotificationManager(private val context: Context) {
 
         val notification = Notification.Builder(context, notificationChannelId)
             .setContentTitle("Tesla Charging Reminder")
-            .setContentText("$nickname's battery left is $battery%.")
+            .setContentText(body)
             .setSmallIcon(R.drawable.ic_baseline_battery_charging_full_24)
+            .setShowWhen(true)
             .setContentIntent(pendingIntent)
             .build()
 

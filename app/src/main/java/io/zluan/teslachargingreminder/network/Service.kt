@@ -1,22 +1,55 @@
 package io.zluan.teslachargingreminder.network
 
+import android.app.Service
+import io.zluan.teslachargingreminder.TeslaChargingReminderApplication
+import io.zluan.teslachargingreminder.extension.PREF_FILE_KEY
+import io.zluan.teslachargingreminder.extension.getAccessToken
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
+import retrofit2.http.Path
 
 /** All Tesla's network communications. */
 interface TeslaService {
-    @GET("1")
-    suspend fun getCarStats(): Stats
-}
+    @POST("/oauth/token")
+    suspend fun getAccessToken(@Body request: AccessTokenRequest): AccessTokenResponse
 
-/** Main entry point for network access. */
-object TeslaNetwork {
-    // Configure retrofit to parse JSON and use coroutines
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://jsonplaceholder.typicode.com/todos/")
-        .addConverterFactory(MoshiConverterFactory.create())
-        .build()
+    @GET("/api/1/vehicles")
+    suspend fun getVehicleList(): VehicleList
 
-    val teslaService = retrofit.create(TeslaService::class.java)
+    @GET("/api/1/vehicles/{id}/data_request/charge_state")
+    suspend fun getChargeState(@Path("id") id: Long): ChargeStateResponse
+
+    companion object {
+
+        private val sharedPrefs = TeslaChargingReminderApplication.context.getSharedPreferences(
+            PREF_FILE_KEY,
+            Service.MODE_PRIVATE
+        )
+
+        // for Logging
+        private val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+
+        private val httpClientBuilder = OkHttpClient.Builder().addInterceptor { chain ->
+            val newRequestBuilder = chain.request().newBuilder()
+                .addHeader("Content-Type", "application/json")
+            sharedPrefs.getAccessToken()?.let { accessToken ->
+                newRequestBuilder.addHeader("Authorization", "Bearer $accessToken")
+            }
+            chain.proceed(newRequestBuilder.build())
+        }.addInterceptor(interceptor)
+
+        val endpoints: TeslaService = Retrofit.Builder()
+            .baseUrl("https://owner-api.teslamotors.com/")
+            .addConverterFactory(MoshiConverterFactory.create())
+            .client(httpClientBuilder.build())
+            .build()
+            .create(TeslaService::class.java)
+    }
 }

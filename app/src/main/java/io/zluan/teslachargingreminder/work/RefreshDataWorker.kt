@@ -13,7 +13,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters)
     override suspend fun doWork(): Result {
         val statsRepository = StatsRepository(applicationContext)
         try {
-            statsRepository.refreshStats()
+            statsRepository.refreshChargeState()
         } catch (e: HttpException) {
             return Result.retry()
         }

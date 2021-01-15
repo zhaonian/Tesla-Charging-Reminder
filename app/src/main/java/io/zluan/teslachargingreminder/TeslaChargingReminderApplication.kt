@@ -21,6 +21,7 @@ class TeslaChargingReminderApplication : Application() {
      */
     override fun onCreate() {
         super.onCreate()
+        context = this
         applicationScope.launch {
             setupRecurringWork()
         }
@@ -30,21 +31,26 @@ class TeslaChargingReminderApplication : Application() {
      * Set up WorkManager background job to fetch new network data every 30 minutes.
      *
      * The min interval for WorkManager to work is 15 mins.
+     * TODO: add another worker for refreshing access_token every 45 days.
      */
     private fun setupRecurringWork() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .build()
 
-        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(30, TimeUnit.MINUTES)
+        val repeatingRequest = PeriodicWorkRequestBuilder<RefreshDataWorker>(45, TimeUnit.MINUTES)
             .setConstraints(constraints)
             .build()
 
-        Log.d("TeslaChargingReminderApplication", "WorkManager: Periodic Work request for sync is scheduled")
         WorkManager.getInstance().enqueueUniquePeriodicWork(
             RefreshDataWorker.WORK_NAME,
             ExistingPeriodicWorkPolicy.REPLACE,
             repeatingRequest
         )
+    }
+
+    companion object {
+        lateinit var context: TeslaChargingReminderApplication
+            private set
     }
 }
