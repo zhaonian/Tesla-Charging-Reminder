@@ -3,4 +3,5 @@
     <color name="colorPrimary">#666666</color>
     <color name="colorPrimaryDark">#333333</color>
     <color name="colorAccent">#cc0000</color>
+    <color name="lightningBolt">#fdd023</color>
 </resources>

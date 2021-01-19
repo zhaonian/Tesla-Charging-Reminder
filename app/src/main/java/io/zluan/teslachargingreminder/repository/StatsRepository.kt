@@ -4,6 +4,7 @@ import android.app.Service
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import io.zluan.teslachargingreminder.R
 import io.zluan.teslachargingreminder.extension.*
 import io.zluan.teslachargingreminder.network.AccessTokenRequest
 import io.zluan.teslachargingreminder.network.TeslaService
@@ -21,10 +22,12 @@ class StatsRepository(private val context: Context) {
     suspend fun refreshChargeState() {
         withContext(Dispatchers.IO) {
             notificationManager.sendNotification(
-                "firstVehicleName has a battery level of {chargeState.batteryLevel}%\n" +
-                        "\t-Range: {chargeState.batteryRange}\n" +
-                        "\t-Est. Range based on your avg. consumption: {chargeState.estBatteryRange}"
+                title = context.getString(R.string.summary_reminder_title, sharedPrefs.getVehicleName()),
+                body = context.getString(R.string.expanded_reminder_description, 44, "233", "250")
             )
+//            "firstVehicleName has a battery level of {chargeState.batteryLevel}%\n" +
+//                    "\t-Range: {chargeState.batteryRange}\n" +
+//                    "\t-Est. Range based on your avg. consumption: {chargeState.estBatteryRange}"
 //            val firstVehicleId = sharedPrefs.getVehicleId()
 //            val firstVehicleName = sharedPrefs.getVehicleName()
 //            if (firstVehicleId != -1L) {

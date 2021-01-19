@@ -18,7 +18,7 @@ import io.zluan.teslachargingreminder.R
 
 class NotificationManager(private val context: Context) {
 
-    fun sendNotification(body: String) {
+    fun sendNotification(title: String, body: String) {
         val notificationChannelId = "Tesla Charging Reminder Channel Id"
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val ringtoneManager = getDefaultUri(TYPE_NOTIFICATION)
@@ -39,13 +39,26 @@ class NotificationManager(private val context: Context) {
         }
         notificationManager.createNotificationChannel(notificationChannel)
 
-        val notificationLayout = RemoteViews(context.packageName, R.layout.notification_expanded)
         val pendingIntent = Intent(context, MainActivity::class.java).let { notificationIntent ->
             PendingIntent.getActivity(context,  /* requestCode= */ 0, notificationIntent, /* flags= */ 0)
         }
 
+        val expandedLayout = RemoteViews(context.packageName, R.layout.notification_expanded).apply {
+            setTextViewText(R.id.description, body)
+        }
+        val summaryLayout = RemoteViews(context.packageName, R.layout.notification_summary).apply {
+            setTextViewText(R.id.title, title)
+        }
+
         val notification = Notification.Builder(context, notificationChannelId)
-            .setCustomBigContentView(notificationLayout)
+            .setCustomHeadsUpContentView(summaryLayout)
+            .setCustomBigContentView(expandedLayout)
+//            .setColor(context.getColor(R.color.colorAccent))
+//            .setContentTitle(title)
+//            .setContentText(body)
+//            .setShowWhen(true)
+//            .setColorized(true)
+            .setStyle(Notification.MediaStyle())
             .setSmallIcon(R.drawable.ic_lightning_bolt)
             .setContentIntent(pendingIntent)
             .build()
