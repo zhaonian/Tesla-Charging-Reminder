@@ -4,4 +4,5 @@
     <string name="expanded_reminder_description">
         • Battery: %1$d%%\n• Range: <xliff:g name="range">%s</xliff:g>miles\n• Est. range: <xliff:g name="est_range">%s</xliff:g> miles
     </string>
+    <string name="settings_use_custom_view">Use custom view</string>
 </resources>

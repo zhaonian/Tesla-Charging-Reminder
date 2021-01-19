@@ -18,7 +18,7 @@ import io.zluan.teslachargingreminder.R
 
 class NotificationManager(private val context: Context) {
 
-    fun sendNotification(title: String, body: String) {
+    fun sendNotification(title: String, body: String, useCustomView: Boolean) {
         val notificationChannelId = "Tesla Charging Reminder Channel Id"
         val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val ringtoneManager = getDefaultUri(TYPE_NOTIFICATION)
@@ -50,19 +50,24 @@ class NotificationManager(private val context: Context) {
             setTextViewText(R.id.title, title)
         }
 
-        val notification = Notification.Builder(context, notificationChannelId)
-            .setCustomHeadsUpContentView(summaryLayout)
-            .setCustomBigContentView(expandedLayout)
-//            .setColor(context.getColor(R.color.colorAccent))
-//            .setContentTitle(title)
-//            .setContentText(body)
-//            .setShowWhen(true)
-//            .setColorized(true)
+        val notificationBuilder = Notification.Builder(context, notificationChannelId)
             .setStyle(Notification.MediaStyle())
             .setSmallIcon(R.drawable.ic_lightning_bolt)
             .setContentIntent(pendingIntent)
-            .build()
 
-        notificationManager.notify(1, notification)
+        if (useCustomView) {
+            notificationBuilder
+                .setCustomHeadsUpContentView(summaryLayout)
+                .setCustomBigContentView(expandedLayout)
+        } else {
+            notificationBuilder
+                .setColor(context.getColor(R.color.colorAccent))
+                .setContentTitle(title)
+                .setContentText(body)
+                .setShowWhen(true)
+                .setColorized(true)
+        }
+
+        notificationManager.notify(1, notificationBuilder.build())
     }
 }

@@ -23,28 +23,29 @@ class StatsRepository(private val context: Context) {
         withContext(Dispatchers.IO) {
             notificationManager.sendNotification(
                 title = context.getString(R.string.summary_reminder_title, sharedPrefs.getVehicleName()),
-                body = context.getString(R.string.expanded_reminder_description, 44, "233", "250")
+                body = context.getString(R.string.expanded_reminder_description, 44, "233", "250"),
+                useCustomView = sharedPrefs.getUseCustomViewSetting()
             )
-//            "firstVehicleName has a battery level of {chargeState.batteryLevel}%\n" +
-//                    "\t-Range: {chargeState.batteryRange}\n" +
-//                    "\t-Est. Range based on your avg. consumption: {chargeState.estBatteryRange}"
-//            val firstVehicleId = sharedPrefs.getVehicleId()
-//            val firstVehicleName = sharedPrefs.getVehicleName()
-//            if (firstVehicleId != -1L) {
-//                val chargeState = TeslaService.endpoints.getChargeState(firstVehicleId).chargeState
-//                if (chargeState.batteryLevel < 25) {
-//
-//                }
-//            }
+            val firstVehicleId = sharedPrefs.getVehicleId()
+            val firstVehicleName = sharedPrefs.getVehicleName()
+            if (firstVehicleId != -1L) {
+                val chargeState = TeslaService.endpoints.getChargeState(firstVehicleId).chargeState
+                if (chargeState.batteryLevel < 25) {
+
+                }
+            }
         }
     }
 
+    // TODO: expand the app to support multiple vehicles.
     suspend fun getFirstVehicle() {
         withContext(Dispatchers.IO) {
-            val vehicleList = TeslaService.endpoints.getVehicleList()
-            val firstVehicle = vehicleList.vehicles[0]
-            sharedPrefs.setVehicleId(firstVehicle.id)
-            sharedPrefs.setVehicleName(firstVehicle.displayName)
+            sharedPrefs.getAccessToken()?.let {
+                val vehicleList = TeslaService.endpoints.getVehicleList()
+                val firstVehicle = vehicleList.vehicles[0]
+                sharedPrefs.setVehicleId(firstVehicle.id)
+                sharedPrefs.setVehicleName(firstVehicle.displayName)
+            }
         }
     }
 
