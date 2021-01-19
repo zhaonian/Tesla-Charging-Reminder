@@ -23,18 +23,19 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="16sp"
             android:text="@string/app_name"
             android:id="@+id/title"
+            android:textStyle="italic"
             android:textColor="#ffffff" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="sadfasdf asdf asdf asdf asdf as"
+            android:paddingStart="20dp"
             android:id="@+id/description"
             android:textColor="#ffffff" />
 
