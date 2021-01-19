@@ -1,6 +1,6 @@
 <resources xmlns:xliff="http://schemas.android.com/apk/res-auto">
     <string name="app_name">Tesla Charging Reminder</string>
-    <string name="summary_reminder_title">It\'s time to charge <xliff:g name="car_name">%s</xliff:g></string>
+    <string name="summary_reminder_title">It\'s time to charge <xliff:g name="car_name">%s</xliff:g> 😋</string>
     <string name="expanded_reminder_description">
         • Battery: %1$d%%\n• Range: <xliff:g name="range">%s</xliff:g>miles\n• Est. range: <xliff:g name="est_range">%s</xliff:g> miles
     </string>
