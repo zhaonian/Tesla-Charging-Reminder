@@ -3,10 +3,8 @@ package io.zluan.teslachargingreminder.repository
 import android.app.Service
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import io.zluan.teslachargingreminder.R
 import io.zluan.teslachargingreminder.extension.*
-import io.zluan.teslachargingreminder.network.AccessTokenRequest
 import io.zluan.teslachargingreminder.network.TeslaService
 import io.zluan.teslachargingreminder.notification.NotificationManager
 import kotlinx.coroutines.Dispatchers
@@ -46,22 +44,6 @@ class StatsRepository(private val context: Context) {
                 sharedPrefs.setVehicleId(firstVehicle.id)
                 sharedPrefs.setVehicleName(firstVehicle.displayName)
             }
-        }
-    }
-
-    suspend fun getAuthToken() {
-        withContext(Dispatchers.IO) {
-            val accessTokenResponse = TeslaService.endpoints.getAccessToken(
-                AccessTokenRequest(
-                    email = "",
-                    password = "",
-                    clientSecret = "c7257eb71a564034f9419ee651c7d0e5f7aa6bfbd18bafb5c5c033b093bb2fa3",
-                    clientId = "81527cff06843c8634fdc09e8ac0abefb46ac849f38fe1e431c2ef2106796384",
-                    grantType = "password"
-                )
-            )
-            sharedPrefs.setAccessToken(accessTokenResponse.accessToken)
-            Log.d("StatsRepository", "token: ${accessTokenResponse.accessToken}")
         }
     }
 }

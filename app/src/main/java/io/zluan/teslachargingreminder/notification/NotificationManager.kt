@@ -27,7 +27,7 @@ class NotificationManager(private val context: Context) {
             .setContentType(CONTENT_TYPE_SONIFICATION).build()
         val notificationChannel = NotificationChannel(
             notificationChannelId,
-            /* name= */ "Tesla Charging Reminder",
+            /* name= */ context.getString(R.string.app_name),
             NotificationManager.IMPORTANCE_HIGH
         ).apply {
             description = "Tesla Charging Reminder Channel"

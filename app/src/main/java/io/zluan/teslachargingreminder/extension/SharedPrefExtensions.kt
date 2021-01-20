@@ -8,6 +8,8 @@ const val ACCESS_TOKEN = "ACCESS_TOKEN"
 const val VEHICLE_ID = "VEHICLE_ID"
 const val VEHICLE_NAME = "VEHICLE_NAME"
 const val SETTINGS_USE_CUSTOM_VIEW = "USE_CUSTOM_VIEW"
+const val USERNAME = "USERNAME"
+const val PASSWORD = "PASSWORD"
 
 fun SharedPreferences.setAccessToken(value: String) {
     return this.setStringPref(ACCESS_TOKEN, value)
@@ -29,14 +31,27 @@ fun SharedPreferences.getVehicleId(): Long {
 }
 
 fun SharedPreferences.setVehicleName(value: String) {
-    with (this.edit()) {
-        putString(VEHICLE_NAME, value)
-        apply()
-    }
+    setStringPref(VEHICLE_NAME, value)
 }
 
 fun SharedPreferences.getVehicleName(): String {
     return this.getString(VEHICLE_NAME, "") ?: ""
+}
+
+fun SharedPreferences.setUsername(value: String) {
+    setStringPref(USERNAME, value)
+}
+
+fun SharedPreferences.getUsername(): String? {
+    return this.getString(USERNAME, null)
+}
+
+fun SharedPreferences.setPassword(value: String) {
+    setStringPref(PASSWORD, value)
+}
+
+fun SharedPreferences.getPassword(): String? {
+    return this.getString(PASSWORD, null)
 }
 
 fun SharedPreferences.setUseCustomViewSetting(useCustomView: Boolean) {

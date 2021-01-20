@@ -5,4 +5,10 @@
         • Battery: %1$d%%\n• Range: <xliff:g name="range">%s</xliff:g>miles\n• Est. range: <xliff:g name="est_range">%s</xliff:g> miles
     </string>
     <string name="settings_use_custom_view">Use custom view</string>
+    <string name="login_email_hint">Email</string>
+    <string name="login_password_hint">Password</string>
+    <string name="login_sign_in">Sign in</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Not a valid password</string>
+    <string name="login_failed">Login failed 🤔</string>
 </resources>
